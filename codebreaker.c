@@ -9,7 +9,7 @@ int main(void) {
   int e; // equation
   a = 1; // minimal possible
   b = 4;
-  for(;c==d;) {
+  for(int a=a, b=b, c=c, d=d, e=e;c==d;) {
     a++;
     b++;
     c = a*b;
