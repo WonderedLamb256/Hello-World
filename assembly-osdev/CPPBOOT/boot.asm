@@ -2,9 +2,13 @@
 ; helloWorld() CPPBOOT
 ; CPP (C++) + Assembly
 ;;;;;;;;;;;;;;;;;;;;
+
+section .boot
+
 bits 16
 org 0x7c00
 
+global boot
 boot:
 	mov ax, 0x2401
 	int 0x15
@@ -15,7 +19,7 @@ boot:
 	mov [disk],dl
 
 	mov ah, 0x2    ;read sectors
-	mov al, 1      ;sectors to read
+	mov al, 6      ;sectors to read
 	mov ch, 0      ;cylinder idx
 	mov dh, 0      ;head idx
 	mov cl, 2      ;sector idx
@@ -76,7 +80,17 @@ boot2:
 	add ebx,2
 	jmp .loop
 halt:
+        mov esp,kernel_stack_top
+	extern kmain
+	call kmain
 	cli
 	hlt
 
-times 1024 - ($-$$) db 0
+section .bss
+align 4
+kernel_stack_bottom: equ $
+     resb 16384 ; 16 KB
+kernel_stack_top:
+
+; times 1024 - ($-$$) db 0
+; unused
